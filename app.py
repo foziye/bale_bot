@@ -19,7 +19,7 @@ def send_message(chat_id, text):
 def home():
     return "Bot is running"
 
-@app.route("/", methods=["POST"])
+@app.route("/webhook", methods=["POST"])
 def webhook():
     data = request.get_json()
 
