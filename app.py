@@ -23,10 +23,12 @@ def home():
 def webhook():
     data = request.get_json()
 
-    if data:
-        message = data.get("message", {})
-        chat_id = message.get("chat", {}).get("id")
-        text = message.get("text", "")
+ if data:
+    print(data)
+
+    message = data.get("message", {})
+    chat_id = message.get("chat_id")
+    text = message.get("text", "")  
 
         if text == "/start":
             send_message(
