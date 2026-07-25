@@ -1,0 +1,49 @@
+from flask import Flask, request
+import requests
+import os
+
+app = Flask(__name__)
+
+TOKEN = os.getenv("BOT_TOKEN")
+
+def send_message(chat_id, text):
+    url = f"https://tapi.bale.ai/bot{TOKEN}/sendMessage"
+
+    data = {
+        "chat_id": chat_id,
+        "text": text
+    }
+
+    response = requests.post(url, json=data)
+
+    print("SEND URL:", url)
+    print("RESPONSE:", response.text)
+
+
+@app.route("/", methods=["GET"])
+def home():
+    return "Bot is running"
+
+
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    data = request.get_json()
+    print(data)
+
+    if data:
+        message = data.get("message", {})
+        chat_id = message.get("chat", {}).get("id")
+        text = message.get("text", "")
+
+        if text == "/start":
+            send_message(
+                chat_id,
+                "سلام 🌹\nبه ربات موسسه زیست و شیمی کنکور خوش آمدید."
+            )
+
+    return "ok"
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
