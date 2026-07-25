@@ -9,11 +9,10 @@ BASE_URL = f"https://tapi.bale.ai/bot{TOKEN}"
 
 def send_message(chat_id, text):
     url = f"{BASE_URL}/sendMessage"
-    data = {
+    requests.post(url, json={
         "chat_id": chat_id,
         "text": text
-    }
-    requests.post(url, json=data)
+    })
 
 @app.route("/", methods=["GET"])
 def home():
@@ -23,18 +22,7 @@ def home():
 def webhook():
     data = request.get_json()
 
- if data:
     print(data)
-
-    message = data.get("message", {})
-    chat_id = message.get("chat_id")
-    text = message.get("text", "")  
-
-        if text == "/start":
-            send_message(
-                chat_id,
-                "سلام 🌹\nبه ربات موسسه زیست و شیمی کنکور خوش آمدید."
-            )
 
     return "ok"
 
